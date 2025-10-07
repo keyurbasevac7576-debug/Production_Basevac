@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaseVac Dental - Production Reporting</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>BaseVac Dental</h2>
+                <span class="nav-tagline">Professional Dental Solutions</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <button class="nav-item btn btn--primary" onclick="showDailyReport()">Daily Report</button>
+                <button class="nav-item btn btn--secondary" onclick="showDashboard()">Dashboard</button>
+                <button class="nav-item btn btn--outline" id="admin-btn" onclick="showAdminLogin()">Admin</button>
+                <button class="nav-item btn btn--outline hidden" id="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Daily Report Section -->
+        <section id="daily-report-section" class="content-section">
+            <div class="section-header">
+                <h1>Daily Production Report</h1>
+                <p>Enter your daily production data below</p>
+            </div>
+            
+            <form id="daily-report-form" class="report-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="report-date" class="form-label">Date</label>
+                        <input type="date" id="report-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="team-member" class="form-label">Team Member</label>
+                        <select id="team-member" class="form-control" required>
+                            <option value="">Select team member</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-select" class="form-label">Task</label>
+                    <select id="task-select" class="form-control" required>
+                        <option value="">Select a task</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="time-spent" class="form-label">Time Spent (hours)</label>
+                        <input type="number" id="time-spent" class="form-control" step="0.25" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="units-completed" class="form-label">Units Completed</label>
+                        <input type="number" id="units-completed" class="form-control" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="comments" class="form-label">Comments (Optional)</label>
+                    <textarea id="comments" class="form-control" rows="3" placeholder="Any additional notes or comments..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--full-width">Submit Report</button>
+            </form>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section hidden">
+            <div class="section-header">
+                <h1>Production Dashboard</h1>
+                <p>Performance overview and metrics</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Today's Reports</h3>
+                    <div class="metric-value" id="today-reports">0</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>This Week</h3>
+                    <div class="metric-value" id="week-reports">0</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Total Reports</h3>
+                    <div class="metric-value" id="total-reports">0</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Avg Efficiency</h3>
+                    <div class="metric-value" id="avg-efficiency">--</div>
+                </div>
+            </div>
+
+            <div class="dashboard-tables">
+                <div class="table-card">
+                    <h3>Recent Reports</h3>
+                    <div class="table-container">
+                        <table id="recent-reports-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Team Member</th>
+                                    <th>Task</th>
+                                    <th>Time (hrs)</th>
+                                    <th>Units</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-reports-tbody">
+                                <!-- Data populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <h3>Team Performance</h3>
+                    <div class="table-container">
+                        <table id="team-performance-table">
+                            <thead>
+                                <tr>
+                                    <th>Team Member</th>
+                                    <th>Reports</th>
+                                    <th>Total Hours</th>
+                                    <th>Avg Efficiency</th>
+                                </tr>
+                            </thead>
+                            <tbody id="team-performance-tbody">
+                                <!-- Data populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Login Section -->
+        <section id="admin-login-section" class="content-section hidden">
+            <div class="login-container">
+                <div class="login-card">
+                    <h2>Admin Login</h2>
+                    <p>Enter your credentials to access admin features</p>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" id="username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                    </form>
+                    <div id="login-error" class="error-message hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel Section -->
+        <section id="admin-panel-section" class="content-section hidden">
+            <div class="section-header">
+                <h1>Admin Panel</h1>
+                <p>Manage system configuration and download reports</p>
+            </div>
+
+            <div class="admin-grid">
+                <div class="admin-card">
+                    <h3>Data Management</h3>
+                    <div class="admin-actions">
+                        <button class="btn btn--primary" onclick="downloadExcelReport()">Download Excel Report</button>
+                        <button class="btn btn--outline" onclick="clearAllData()" id="clear-data-btn">Clear All Data</button>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Team Members</h3>
+                    <div class="config-section">
+                        <div class="input-group">
+                            <input type="text" id="new-team-member" class="form-control" placeholder="Add team member">
+                            <button class="btn btn--secondary" onclick="addTeamMember()">Add</button>
+                        </div>
+                        <div id="team-members-list" class="config-list"></div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Tasks</h3>
+                    <div class="config-section">
+                        <div class="input-group">
+                            <input type="text" id="new-task" class="form-control" placeholder="Add new task">
+                            <button class="btn btn--secondary" onclick="addTask()">Add</button>
+                        </div>
+                        <div id="tasks-list" class="config-list"></div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Standard Times</h3>
+                    <div class="config-section">
+                        <div class="input-group">
+                            <select id="standard-time-task" class="form-control">
+                                <option value="">Select task</option>
+                            </select>
+                            <input type="number" id="standard-time-hours" class="form-control" placeholder="Hours" step="0.25" min="0">
+                            <button class="btn btn--secondary" onclick="setStandardTime()">Set</button>
+                        </div>
+                        <div id="standard-times-list" class="config-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Messages -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Confirmation Modal - Ensure it's hidden by default -->
+    <div id="confirmation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirm Action</h3>
+            <p id="confirmation-message"></p>
+            <div class="modal-actions">
+                <button class="btn btn--outline" onclick="closeConfirmationModal()">Cancel</button>
+                <button class="btn btn--primary" id="confirm-action-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
